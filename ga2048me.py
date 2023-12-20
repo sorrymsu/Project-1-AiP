@@ -251,4 +251,4 @@ def print_outro():
 
 
 if __name__ == "__main__":
-    main
+    main()
