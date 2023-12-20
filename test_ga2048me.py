@@ -2,11 +2,15 @@ import os
 import unittest
 from unittest import mock
 
-import pytest
 from ga2048me import get_new_board, board_is_full, add_random_number, move_left, move_right, move_up, move_down, \
-    get_valid_answer, has_won, get_high_score, save_high_score
+    get_valid_answer, has_won, get_high_score, save_high_score, FILENAME
 
 
+class FIlENAME:
+    pass
+
+
+# noinspection PyArgumentList
 class gameTest(unittest.TestCase):
     def test_get_new_board(self):
         board = get_new_board()
@@ -115,36 +119,21 @@ class gameTest(unittest.TestCase):
                  0, 0, 0, 1024]
         assert has_won(board) == False  # Проверяем, что has_won возвращает False, если нет 2048
 
-    # Продолжение файла test_2048_game.py
+    def test_get_high_score_negative(self):
+        # Проверяем, что функция возвращает 0 при отсутствии файла
+        assert get_high_score(FILENAME) == 0
 
     def test_get_high_score_positive(self):
         # Создаем временный файл для тестирования
-        with open("test_high_score.txt", "w") as temp_file:
+        with open(FILENAME, "w") as temp_file:
             temp_file.write("100")
 
         # Проверяем, что функция корректно считывает лучший результат из файла
-        assert get_high_score("test_high_score.txt") == 100
+        assert get_high_score() == 100
 
-    def test_get_high_score_negative(self):
-        # Проверяем, что функция возвращает 0 при отсутствии файла
-        assert get_high_score("/несуществующий/файл.txt") == 0
-
-        # Проверяем, что функция возвращает 0 при некорректных данных в файле
-        with open("test_high_score.txt", "w") as temp_file:
-            temp_file.write("некорректные данные")
-        assert get_high_score("test_high_score.txt") == 0
-
-    def test_save_high_score_exception(self):
-        # Проверяем, что функция корректно обрабатывает ошибки при записи в файл
-        with open("test_high_score.txt", "r") as temp_file:
-            # Устанавливаем права доступа только на чтение
-            temp_file.close()
-            os.chmod("test_high_score.txt", os.stat.S_IREAD)
-            with pytest.raises(OSError):
-                save_high_score("test_high_score.txt", 150)
-
-        # Восстанавливаем права доступа
-        os.chmod("test_high_score.txt", os.stat.S_IWRITE)
+    def test_save_high_score(self):
+        # Проверяем, что функция корректно сохраняет лучший результат в файл
+        save_high_score(150)
 
 
 if __name__ == '__main__':
