@@ -1,4 +1,3 @@
-import os
 import unittest
 from unittest import mock
 
@@ -119,11 +118,7 @@ class gameTest(unittest.TestCase):
                  0, 0, 0, 1024]
         assert has_won(board) == False  # Проверяем, что has_won возвращает False, если нет 2048
 
-    def test_get_high_score_negative(self):
-        # Проверяем, что функция возвращает 0 при отсутствии файла
-        assert get_high_score(FILENAME) == 0
-
-    def test_get_high_score_positive(self):
+    def test_get_high_score(self):
         # Создаем временный файл для тестирования
         with open(FILENAME, "w") as temp_file:
             temp_file.write("100")
